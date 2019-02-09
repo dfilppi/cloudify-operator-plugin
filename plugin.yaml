@@ -1,0 +1,28 @@
+plugins:
+  operator_plugin:
+    package_name: cloudify-operator-plugin
+    package_version: '0.1'
+    executor: central_deployment_agent
+    source: operator-plugin
+
+node_types:
+
+  cfy_operator:
+    derived_from: cloudify.nodes.Root
+    properties:
+      rest_port:
+        description: REST API listening port
+        default: 5000
+        type: integer
+
+      # Add other properties for application
+        
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          implementation: operator_plugin.cfy_operator.tasks.start
+          executor: central_deployment_agent
+        stop:
+          implementation: operator_plugin.cfy_operator.tasks.stop
+          executor: central_deployment_agent
+
